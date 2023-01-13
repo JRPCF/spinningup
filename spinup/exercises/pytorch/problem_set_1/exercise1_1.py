@@ -23,12 +23,10 @@ def gaussian_likelihood(x, mu, log_std):
     Returns:
         Tensor with shape [batch]
     """
-    #######################
-    #                     #
-    #   YOUR CODE HERE    #
-    #                     #
-    #######################
-    return torch.zeros(1)
+    dist = torch.distributions.Normal(mu, torch.exp(log_std))
+    log_likelihood = dist.log_prob(x)
+    # Log likelihood needs to be summed across the dimension of the samples.
+    return log_likelihood.sum(-1)
 
 
 if __name__ == '__main__':
