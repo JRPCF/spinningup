@@ -19,7 +19,9 @@ from spinup.utils.mpi_tools import mpi_fork, mpi_avg, proc_id, mpi_statistics_sc
 
 # TODO create an experience buffer if needed
 
-def my_algorithm(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict()):
+def my_algorithm(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict()seed=0, 
+        steps_per_epoch=4000, epochs=50, gamma=0.99, pi_lr=3e-4,
+        max_ep_len=1000, logger_kwargs=dict(), save_freq=10):
     """
     TODO implement simple version of algorithm following OpenAI's standard set of steps:
     1) Logger setup
@@ -41,7 +43,44 @@ def my_algorithm(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict()):
         the algorithm
         c) Log key performance metrics and save agent
     """
-    pass
+
+    """ OpenAI Step 1) Logger setup (From OpenAI implementation) """
+    logger = EpochLogger(**logger_kwargs)
+    logger.save_config(locals())
+
+    """ OpenAI Step 2) Random seed setting (From OpenAI implementation) """
+    seed += 10000 * proc_id()
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+
+    """ OpenAI Step 3) Environment instantiation """
+    env = env_fn()
+    obs_dim = env.observation_space.shape
+    act_dim = env.action_space.shape
+
+    """ OpenAI Step 4) Making placeholders for the computation graph """
+    # TODO
+
+    """ OpenAI Step 5) Building the actor-critic computation graph via the actor_critic function passed to
+    the algorithm function as an argument """
+    ac = actor_critic(env.observation_space, env.action_space, **ac_kwargs)
+
+    """ OpenAI Step 6) Instantiating the experience buffer """
+    # TODO
+
+    """ OpenAI Step 7) Building the computation graph for loss functions and diagnostics specific to the
+    algorithm """
+    """ OpenAI Step 8) Making training ops """
+    """ OpenAI Step 9) Setting up model saving through the logger """
+    """ OpenAI Step 10) Defining functions needed for running the main loop of the algorithm (e.g. the core
+    update function, get action function, and test agent function, depending on the algorithm) """
+    """ OpenAI Step 11) Running the main loop of the algorithm:
+        a) Run the agent in the environment
+        b) Periodically update the parameters of the agent according to the main equations of
+        the algorithm
+        c) Log key performance metrics and save agent
+    """
+
 
 if __name__ == '__main__':
     import argparse
@@ -61,5 +100,10 @@ if __name__ == '__main__':
     my_algorithm(lambda : gym.make(args.env), actor_critic=core.MLPActorCritic,
         ac_kwargs=dict(
             # TODO complete kwargs according to algorithm
-        )
+        ),
+        gamma=args.gamma,
+        seed=args.seed,
+        steps=args.steps,
+        epochs=args.epochs,
+        logger_kwargs=logger_kwargs,
     )
