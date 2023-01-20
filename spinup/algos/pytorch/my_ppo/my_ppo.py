@@ -98,7 +98,7 @@ class MyBuffer:
 def my_ppo(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict(),  seed=0, 
         steps=4000, epochs=50, gamma=0.99, clip_ratio=0.2, pi_lr=3e-4, vf_lr=1e-3,
         train_pi_iters=80, train_v_iters=80, lam=0.97, max_ep_len=1000, target_kl=0.01,
-        logger_kwargs=dict(),save_freq=10):
+        logger_kwargs=dict(), save_freq=10):
     """
     My Proximal Policy Optimization Implementation
 
@@ -285,8 +285,8 @@ def my_ppo(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict(),  seed=0,
         i = 0
         while i < train_pi_iters:
             pi_optimizer.zero_grad()
-            pi_loss_2, pi_info = calc_loss_pi(data)
-            if pi_info['kl'] > 1.5 * target_kl:
+            pi_loss_2, pi_info_2 = calc_loss_pi(data)
+            if pi_info_2['kl'] > 1.5 * target_kl:
                 logger.log('Early stopping at step %d due to reaching max kl.'%i)
                 break
             pi_loss_2.backward()
@@ -306,7 +306,7 @@ def my_ppo(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict(),  seed=0,
 
 
         # Log data.
-        kl, ent, cf = pi_info_1['kl'], pi_info_1['ent'], pi_info['cf']
+        kl, ent, cf = pi_info_1['kl'], pi_info_1['ent'], pi_info_2['cf']
         logger.store(
             LossPi=pi_loss_1.item(),
             LossV=v_loss_1.item(),
@@ -355,7 +355,7 @@ def my_ppo(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict(),  seed=0,
                 else:
                     v = 0
                 # Using total episodic reward as a proxy for value function.
-                buf.finish_path(ep_r)
+                buf.finish_path(v)
                 if terminal_step:
                     logger.store(EpRet=ep_r, EpLen=ep_len)
                 # Reset environment.

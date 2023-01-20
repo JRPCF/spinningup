@@ -129,7 +129,7 @@ class MLPGaussianActor(nn.Module):
         super().__init__()
         log_std = -0.5 * np.ones(act_dim, dtype=np.float32)
         self.log_std = torch.nn.Parameter(torch.as_tensor(log_std))
-        self.nn = mlp([obs_dim]+list(hidden_sizes)+[1], activation)
+        self.nn = mlp([obs_dim]+list(hidden_sizes)+[act_dim], activation)
     
     def _dist(self, obs):
         """Calculate the diagonal gaussian distribution given an observation.
@@ -303,3 +303,4 @@ class MLPActorCritic(nn.Module):
             pi = self.pi._dist(obs)
             a = pi.sample()
         return a.numpy()
+
