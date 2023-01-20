@@ -106,7 +106,7 @@ def my_ppo(env_fn, actor_critic=core.MLPActorCritic, ac_kwargs=dict(),  seed=0,
     after reading the original papers with the intention of strengthening my understanding
     of fundatmental RL algorithms.
 
-    This is done from a copy of My ppo implementation and after reading the SpinningUp implementation.
+    This is done from a copy of My vpg implementation and after reading the SpinningUp implementation.
 
     The function header is the same as the one from the spinningup implementaiton.
 
