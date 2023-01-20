@@ -1,4 +1,4 @@
-"""My VPG implementation core.py.
+"""My ppo implementation core.py.
 
 Modified from my_template.
 """
@@ -218,7 +218,7 @@ class MLPCritic(nn.Module):
 
 class MLPActorCritic(nn.Module):
     """
-    My VPG actor critic.
+    My ppo actor critic.
     """
 
     def __init__(self, observation_space, action_space,
