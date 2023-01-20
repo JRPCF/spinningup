@@ -12,6 +12,7 @@ DEFAULT_BACKEND = {
     'sac': 'pytorch',
     'my_vpg': 'pytorch',
     'my_ppo': 'pytorch',
+    'my_ddpg': 'pytorch',
 }
 
 # Where experiment outputs are saved by default:
