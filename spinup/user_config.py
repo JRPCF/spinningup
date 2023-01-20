@@ -11,6 +11,7 @@ DEFAULT_BACKEND = {
     'td3': 'pytorch',
     'sac': 'pytorch',
     'my_vpg': 'pytorch',
+    'my_ppo': 'pytorch',
 }
 
 # Where experiment outputs are saved by default:
